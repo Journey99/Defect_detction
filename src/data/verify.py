@@ -9,12 +9,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset-yaml", required=True, help="Path to data.yaml")
     return parser.parse_args()
 
-
+# 이미지 파일 수집
 def collect_images(image_dir: Path) -> list[Path]:
     exts = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"}
     return sorted([p for p in image_dir.iterdir() if p.is_file() and p.suffix.lower() in exts])
 
-
+# 라벨 파일 검증
 def validate_label_file(label_file: Path, num_classes: int, split: str) -> list[str]:
     errors: list[str] = []
     raw_text = label_file.read_text(encoding="utf-8").strip()

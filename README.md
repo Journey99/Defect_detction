@@ -96,20 +96,8 @@ python src/train/train.py --config configs/wiou.yaml
 python src/eval/evaluate.py --weights runs/train/wiou/weights/best.pt --tta
 ```
 
-### Phase 4 — 서빙
 
-```bash
-# ONNX export
-python src/serve/export.py --weights runs/train/best/weights/best.pt
-
-# FastAPI 서버 실행
-uvicorn src.serve.api:app --host 0.0.0.0 --port 8000 --reload
-
-# 추론 테스트
-curl -X POST "http://localhost:8000/predict" \
-     -F "file=@test_image.jpg"
 ```
-
 또는 Makefile 사용:
 ```bash
 make setup      # 환경 설치
@@ -130,7 +118,7 @@ make serve      # API 서버 실행
 | YOLOv11m + TTA | WIoU | - | - | - |
 | RT-DETR-R50 | - | - | - | - |
 
-> 학습 완료 후 수치 업데이트 예정 / WandB 대시보드: [링크 추가]
+
 
 ---
 
