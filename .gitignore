@@ -1,0 +1,17 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Artifacts
+runs/
+wandb/
+*.onnx
+*.pt
+
+# Data
+data/raw/
+data/processed/

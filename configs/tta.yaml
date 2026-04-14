@@ -1,0 +1,10 @@
+weights: runs/train/wiou/weights/best.pt
+imgsz: 640
+conf: 0.25
+iou: 0.7
+tta: true
+weights: runs/train/wiou/weights/best.pt
+imgsz: 640
+conf: 0.25
+iou: 0.7
+tta: true

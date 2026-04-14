@@ -1,0 +1,10 @@
+experiment_name: baseline
+model: yolo11m.pt
+data: data/data.yaml
+imgsz: 640
+epochs: 100
+batch: 16
+device: 0
+workers: 8
+project: runs/train
+name: baseline
