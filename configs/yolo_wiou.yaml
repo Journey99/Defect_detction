@@ -1,11 +1,14 @@
-experiment_name: wiou
+experiment_name: yolo_wiou
 model: yolo11m.pt
+model_type: yolo
 data: data/data.yaml
 imgsz: 640
 epochs: 100
 batch: 16
 device: 0
 workers: 8
-project: runs/train
-name: wiou
+mosaic: 1.0
+mixup: 0.2
 use_wiou: true
+project: runs/train
+name: yolo_wiou

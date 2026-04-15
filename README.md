@@ -48,9 +48,10 @@ defect-detection/
 │       ├── inference.py      # ONNX Runtime 추론 클래스
 │       └── api.py            # FastAPI 앱
 ├── configs/
-│   ├── baseline.yaml
-│   ├── wiou.yaml
-│   └── tta.yaml
+│   ├── yolo_ciou.yaml
+│   ├── yolo_wiou.yaml
+│   ├── yolo_wiou_tta.yaml
+│   └── rtdetr.yaml
 ├── requirements.txt
 └── Makefile
 ```
@@ -73,27 +74,38 @@ PyYAML==6.0.1
 
 ## 🚀 실행 방법
 
-### Phase 1 — 베이스라인
+### 실험 1 — YOLOv11 + CIoU
 
 ```bash
 # 데이터 변환 (로컬)
 python src/data/convert.py --input data/raw --output data/processed
 
-# 학습 (Kaggle / Colab)
-python src/train/train.py --config configs/baseline.yaml
+# 학습
+python src/train/train.py --config configs/yolo_ciou.yaml
 
 # 평가
-python src/eval/evaluate.py --weights runs/train/baseline/weights/best.pt
+python src/eval/evaluate.py --weights runs/train/yolo_ciou/weights/best.pt --model-type yolo
 ```
 
-### Phase 2 — WIoU + TTA
+### 실험 2 — YOLOv11 + WIoU
 
 ```bash
-# WIoU loss 실험
-python src/train/train.py --config configs/wiou.yaml
+python src/train/train.py --config configs/yolo_wiou.yaml
+python src/eval/evaluate.py --weights runs/train/yolo_wiou/weights/best.pt --model-type yolo
+```
 
-# TTA 평가
-python src/eval/evaluate.py --weights runs/train/wiou/weights/best.pt --tta
+### 실험 3 — YOLOv11 + TTA + WIoU
+
+```bash
+# WIoU로 학습된 weight에 TTA 평가 적용
+python src/eval/evaluate.py --weights runs/train/yolo_wiou/weights/best.pt --model-type yolo --tta
+```
+
+### 실험 4 — RT-DETR
+
+```bash
+python src/train/train.py --config configs/rtdetr.yaml
+python src/eval/evaluate.py --weights runs/train/rtdetr/weights/best.pt --model-type rtdetr
 ```
 
 
@@ -102,8 +114,10 @@ python src/eval/evaluate.py --weights runs/train/wiou/weights/best.pt --tta
 ```bash
 make setup      # 환경 설치
 make convert    # 데이터 변환
-make train      # 베이스라인 학습
-make eval       # 평가
+make exp-yolo-ciou      # 실험 1
+make exp-yolo-wiou      # 실험 2
+make exp-yolo-wiou-tta  # 실험 3 (TTA 평가)
+make exp-rtdetr         # 실험 4
 make serve      # API 서버 실행
 ```
 
@@ -131,6 +145,7 @@ make serve      # API 서버 실행
 ### SAHI (Slicing Aided Hyper Inference)
 고해상도 산업 이미지를 슬라이스로 분할하여 추론 후 결과를 병합.
 미세 결함 탐지에 효과적.
+현재 저장소 기준으로 SAHI는 학습 파이프라인이 아니라 추론/평가 단계에서 적용하는 방식이다.
 
 ### TTA (Test Time Augmentation)
 추론 시 다중 스케일 + 좌우 반전 이미지로 앙상블.

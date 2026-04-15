@@ -1,10 +1,14 @@
-experiment_name: baseline
+experiment_name: yolo_ciou
 model: yolo11m.pt
+model_type: yolo
 data: data/data.yaml
 imgsz: 640
 epochs: 100
 batch: 16
 device: 0
 workers: 8
+mosaic: 1.0
+mixup: 0.2
+use_wiou: false
 project: runs/train
-name: baseline
+name: yolo_ciou

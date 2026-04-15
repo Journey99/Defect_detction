@@ -1,0 +1,7 @@
+weights: runs/train/yolo_wiou/weights/best.pt
+model_type: yolo
+data: data/data.yaml
+imgsz: 640
+conf: 0.25
+iou: 0.7
+tta: true

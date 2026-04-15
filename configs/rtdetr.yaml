@@ -1,0 +1,13 @@
+experiment_name: rtdetr
+model: rtdetr-r50.pt
+model_type: rtdetr
+data: data/data.yaml
+imgsz: 640
+epochs: 100
+batch: 16
+device: 0
+workers: 8
+mosaic: 0.0
+mixup: 0.0
+project: runs/train
+name: rtdetr
