@@ -1,10 +1,16 @@
 import argparse
+import sys
 from pathlib import Path
 
 import yaml
 from ultralytics import RTDETR, YOLO
 
-from src.train.losses import build_loss
+# 프로젝트 루트를 path에 넣어 `python src/train/train.py`·Colab 등에서도 `src` import 가능
+_ROOT = Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+from src.train.losses import apply_wiou_patch
 
 
 def parse_args() -> argparse.Namespace:
@@ -24,6 +30,10 @@ def build_model(cfg: dict) -> YOLO | RTDETR:
             model_type = "yolo"
 
     if model_type == "rtdetr":
+        # Ultralytics에서는 rtdetr-r50.pt 대신 rtdetr-l.pt/x.pt 프리트레인을 사용한다.
+        if model_path.lower() == "rtdetr-r50.pt":
+            print("[train] model alias: rtdetr-r50.pt -> rtdetr-l.pt")
+            model_path = "rtdetr-l.pt"
         return RTDETR(model_path)
     if model_type == "yolo":
         return YOLO(model_path)
@@ -60,7 +70,7 @@ def main() -> None:
     with cfg_path.open("r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
 
-    loss_name = build_loss(bool(cfg.get("use_wiou", False)))
+    loss_name = apply_wiou_patch(bool(cfg.get("use_wiou", False)))
     print(f"[train] configured loss mode: {loss_name}")
 
     model = build_model(cfg)

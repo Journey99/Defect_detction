@@ -1,5 +1,5 @@
 experiment_name: rtdetr
-model: rtdetr-r50.pt
+model: rtdetr-l.pt
 model_type: rtdetr
 data: data/data.yaml
 imgsz: 640
